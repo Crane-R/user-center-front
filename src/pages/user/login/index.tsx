@@ -109,7 +109,7 @@ const Login: React.FC = () => {
             maxWidth: '75vw',
           }}
           logo={<img alt="logo" src="/logo.svg" />}
-          title="注册账户"
+          title="用户中心"
           // subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
           subTitle={'通用用户中心'}
           initialValues={{
