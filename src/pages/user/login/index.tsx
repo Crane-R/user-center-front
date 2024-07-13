@@ -167,10 +167,19 @@ const Login: React.FC = () => {
             >
               忘记密码 ?
             </a>
+            <a
+              style={{
+                float: 'right',
+                marginRight:24
+              }}
+              href="/user/register"
+            >
+              注册账户
+            </a>
           </div>
         </LoginForm>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 };

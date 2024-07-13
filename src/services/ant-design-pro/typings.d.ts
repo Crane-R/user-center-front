@@ -29,6 +29,12 @@ declare namespace API {
     currentAuthority?: string;
   };
 
+  type Result = {
+    status:string;
+    msg?:string;
+    data?:string;
+  }
+
   type PageParams = {
     current?: number;
     pageSize?: number;
