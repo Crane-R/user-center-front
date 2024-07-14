@@ -2,11 +2,11 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** 获取当前的用户 GET /api/currentUser */
+/** 获取当前的用户 GET /api/user/current */
 export async function currentUser(options?: { [key: string]: any }) {
   return request<{
     data: API.CurrentUser;
-  }>('/api/currentUser', {
+  }>('/api/user/current', {
     method: 'GET',
     ...(options || {}),
   });
@@ -47,6 +47,14 @@ export async function register(body: API.LoginParams, options?: { [key: string]:
 /** 此处后端没有提供注释 GET /api/notices */
 export async function getNotices(options?: { [key: string]: any }) {
   return request<API.NoticeIconList>('/api/notices', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** 获取用户信息列表 */
+export async function getUserList(options?: { [key: string]: any }) {
+  return request<API.NoticeIconList>('/api/user/query', {
     method: 'GET',
     ...(options || {}),
   });

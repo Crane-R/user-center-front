@@ -73,6 +73,7 @@
     "@umijs/fabric": "^2.14.1",
     "@umijs/lint": "^4.1.0",
     "@umijs/max": "^4.1.0",
+    "@umijs/preset-ui": "^2.2.9",
     "cross-env": "^7.0.3",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",

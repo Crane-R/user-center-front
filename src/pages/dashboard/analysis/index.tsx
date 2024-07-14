@@ -154,4 +154,5 @@ const Analysis: FC<AnalysisProps> = () => {
     </GridContent>
   );
 };
+
 export default Analysis;
