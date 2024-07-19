@@ -1,11 +1,10 @@
-import {EllipsisOutlined, PlusOutlined} from '@ant-design/icons';
+import {PlusOutlined} from '@ant-design/icons';
 import type {ActionType, ProColumns} from '@ant-design/pro-components';
 import {ProTable} from '@ant-design/pro-components';
-import {Button, Dropdown, Image, message, Tag} from 'antd';
-import {useEffect, useRef, useState} from 'react';
+import {Button, Image, message, Tag} from 'antd';
+import {useRef} from 'react';
 import {getUserList, userDelete} from "@/services/ant-design-pro/api";
 import {PageContainer} from '@ant-design/pro-components';
-import {request} from "@/app";
 
 export const waitTimePromise = async (time: number = 100) => {
   return new Promise((resolve) => {
@@ -102,7 +101,12 @@ const columns: ProColumns<API.CurrentUser>[] = [
       >
         编辑
       </a>,
-      <a href={currentRow.userId} target="_blank" rel="noopener noreferrer" key="view">
+      <a
+        key='look'
+        onClick={() => {
+          window.location.href = '/account'
+        }}
+      >
         查看
       </a>,
       <a
@@ -162,18 +166,6 @@ export default () => {
             listsHeight: 400,
           },
         }}
-        form={{
-          // 由于配置了 transform，提交的参数与定义的不同这里需要转化一下
-          syncToUrl: (values, type) => {
-            if (type === 'get') {
-              return {
-                ...values,
-                created_at: [values.startTime, values.endTime],
-              };
-            }
-            return values;
-          },
-        }}
         pagination={{
           pageSize: 10,
           onChange: (page) => console.log(page),
@@ -191,30 +183,7 @@ export default () => {
             type="primary"
           >
             新增用户
-          </Button>,
-          <Dropdown
-            key="menu"
-            menu={{
-              items: [
-                {
-                  label: '1st item',
-                  key: '1',
-                },
-                {
-                  label: '2nd item',
-                  key: '2',
-                },
-                {
-                  label: '3rd item',
-                  key: '3',
-                },
-              ],
-            }}
-          >
-            <Button>
-              <EllipsisOutlined/>
-            </Button>
-          </Dropdown>,
+          </Button>
         ]}
       />
 
