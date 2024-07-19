@@ -1,9 +1,5 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import '@umijs/max';
-export type SiderTheme = 'light' | 'dark';
-export const SelectLang = () => {
-  return <UmiSelectLang />;
-};
 export const Question = () => {
   return (
     <div

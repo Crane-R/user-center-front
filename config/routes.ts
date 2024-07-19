@@ -105,6 +105,7 @@ export default [
     routes: [
       {path: '/admin', name: '管理页', icon: 'smile', component: './Admin',hideInMenu: true},
       {path: '/admin/user_manage', name: '用户管理', icon: 'smile', component: './admin/user_manage'},
+      {path: '/admin/user_add', name: '新增用户', icon: 'smile', component: './admin/user_add'},
       {component: './404'}
     ]
   },

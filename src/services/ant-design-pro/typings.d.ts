@@ -6,24 +6,26 @@ declare namespace API {
     username?: string;
     nickname?: string;
     avatarUrl?: string;
-    userId?: string;
-    gender?:number;
-    userStatus?:number;
-    createTime?:string;
-    updateTime?:string;
-    userRole?:number;
+    id?: number;
+    gender?: number;
+    userStatus?: number;
+    createTime?: string;
+    updateTime?: string;
+    userRole?: number;
   };
 
   type LoginResult = {
-    status?: string;
-    type?: string;
-    currentAuthority?: string;
+    code?: number;
+    data?: object;
+    description?: string;
+    msg?: string;
   };
 
   type Result = {
-    status:string;
-    msg?:string;
-    data?:string;
+    code?: number;
+    data?: object;
+    description?: string;
+    msg?: string;
   }
 
   type PageParams = {
@@ -63,6 +65,10 @@ declare namespace API {
     password?: string;
     autoLogin?: boolean;
     type?: string;
+  };
+
+  type deleteParams = {
+    userId: number;
   };
 
   type ErrorResponse = {

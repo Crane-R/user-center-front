@@ -1,11 +1,11 @@
 import {EllipsisOutlined, PlusOutlined} from '@ant-design/icons';
 import type {ActionType, ProColumns} from '@ant-design/pro-components';
-import {ProTable, TableDropdown} from '@ant-design/pro-components';
-import {Button, Dropdown, Image, Space, Tag} from 'antd';
-import {useRef} from 'react';
-import request from 'umi-request';
-import {getUserList} from "@/services/ant-design-pro/api";
-import {switchCase} from "@babel/types";
+import {ProTable} from '@ant-design/pro-components';
+import {Button, Dropdown, Image, message, Tag} from 'antd';
+import {useEffect, useRef, useState} from 'react';
+import {getUserList, userDelete} from "@/services/ant-design-pro/api";
+import {PageContainer} from '@ant-design/pro-components';
+import {request} from "@/app";
 
 export const waitTimePromise = async (time: number = 100) => {
   return new Promise((resolve) => {
@@ -18,23 +18,6 @@ export const waitTimePromise = async (time: number = 100) => {
 export const waitTime = async (time: number = 100) => {
   await waitTimePromise(time);
 };
-
-type GithubIssueItem = {
-  url: string;
-  id: number;
-  number: number;
-  title: string;
-  labels: {
-    name: string;
-    color: string;
-  }[];
-  state: string;
-  comments: number;
-  created_at: string;
-  updated_at: string;
-  closed_at?: string;
-};
-
 const columns: ProColumns<API.CurrentUser>[] = [
   {
     title: '头像',
@@ -65,6 +48,7 @@ const columns: ProColumns<API.CurrentUser>[] = [
     valueEnum: {
       0: {text: '女'},
       1: {text: '男'},
+      2: {text: '未知'},
     }
   },
   {
@@ -109,120 +93,132 @@ const columns: ProColumns<API.CurrentUser>[] = [
     title: '操作',
     valueType: 'option',
     key: 'option',
-    render: (text, record, _, action) => [
+    render: (node, currentRow, _, action) => [
       <a
         key="editable"
         onClick={() => {
-          action?.startEditable?.(record.userId);
+          action?.startEditable?.(currentRow.userId);
         }}
       >
         编辑
       </a>,
-      <a href={record.userId} target="_blank" rel="noopener noreferrer" key="view">
+      <a href={currentRow.userId} target="_blank" rel="noopener noreferrer" key="view">
         查看
       </a>,
-      <TableDropdown
-        key="actionGroup"
-        onSelect={() => action?.reload()}
-        menus={[
-          {key: 'copy', name: '复制'},
-          {key: 'delete', name: '删除'},
-        ]}
-      />,
+      <a
+        key="delete"
+        onClick={async () => {
+          const sure = confirm('确认删除吗？')
+          if (!sure) {
+            return;
+          }
+          await userDelete(currentRow.id);
+          message.success('删除成功，请手动点击查询以刷新表格')
+          const result = await getUserList();
+        }}
+      >
+        删除
+      </a>,
     ],
   },
 ];
 
 export default () => {
   const actionRef = useRef<ActionType>();
+
   return (
-    <ProTable<API.CurrentUser>
-      columns={columns}
-      actionRef={actionRef}
-      cardBordered
-      request={async (params, sort, filter) => {
-        console.log(sort, filter);
-        await waitTime(2000);
-        const result = await getUserList();
-        return {
-          data: result.data
-        }
-      }}
-      editable={{
-        type: 'multiple',
-      }}
-      columnsState={{
-        persistenceKey: 'pro-table-singe-demos',
-        persistenceType: 'localStorage',
-        defaultValue: {
-          option: {fixed: 'right', disable: true},
-        },
-        onChange(value) {
-          console.log('value: ', value);
-        },
-      }}
-      rowKey="id"
-      search={{
-        labelWidth: 'auto',
-      }}
-      options={{
-        setting: {
-          listsHeight: 400,
-        },
-      }}
-      form={{
-        // 由于配置了 transform，提交的参数与定义的不同这里需要转化一下
-        syncToUrl: (values, type) => {
-          if (type === 'get') {
-            return {
-              ...values,
-              created_at: [values.startTime, values.endTime],
-            };
+    <PageContainer>
+      <ProTable<API.CurrentUser>
+        columns={columns}
+        actionRef={actionRef}
+        cardBordered
+        request={async (params, sort, filter) => {
+          console.log(sort, filter);
+          await waitTime(2000);
+          const result = await getUserList();
+          return {
+            data: result.data
           }
-          return values;
-        },
-      }}
-      pagination={{
-        pageSize: 5,
-        onChange: (page) => console.log(page),
-      }}
-      dateFormatter="string"
-      headerTitle="高级表格"
-      toolBarRender={() => [
-        <Button
-          key="button"
-          icon={<PlusOutlined/>}
-          onClick={() => {
-            actionRef.current?.reload();
-          }}
-          type="primary"
-        >
-          新建
-        </Button>,
-        <Dropdown
-          key="menu"
-          menu={{
-            items: [
-              {
-                label: '1st item',
-                key: '1',
-              },
-              {
-                label: '2nd item',
-                key: '2',
-              },
-              {
-                label: '3rd item',
-                key: '3',
-              },
-            ],
-          }}
-        >
-          <Button>
-            <EllipsisOutlined/>
-          </Button>
-        </Dropdown>,
-      ]}
-    />
+        }}
+        editable={{
+          type: 'multiple',
+        }}
+        columnsState={{
+          persistenceKey: 'pro-table-singe-demos',
+          persistenceType: 'localStorage',
+          defaultValue: {
+            option: {fixed: 'right', disable: true},
+          },
+          onChange(value) {
+            console.log('value: ', value);
+          },
+        }}
+        rowKey="id"
+        search={{
+          labelWidth: 'auto',
+        }}
+        options={{
+          setting: {
+            listsHeight: 400,
+          },
+        }}
+        form={{
+          // 由于配置了 transform，提交的参数与定义的不同这里需要转化一下
+          syncToUrl: (values, type) => {
+            if (type === 'get') {
+              return {
+                ...values,
+                created_at: [values.startTime, values.endTime],
+              };
+            }
+            return values;
+          },
+        }}
+        pagination={{
+          pageSize: 10,
+          onChange: (page) => console.log(page),
+        }}
+        dateFormatter="string"
+        headerTitle="用户列表"
+        toolBarRender={() => [
+          <Button
+            key="button"
+            icon={<PlusOutlined/>}
+            onClick={() => {
+              //actionRef.current?.reload();
+              window.location.href = '/admin/user_add'
+            }}
+            type="primary"
+          >
+            新增用户
+          </Button>,
+          <Dropdown
+            key="menu"
+            menu={{
+              items: [
+                {
+                  label: '1st item',
+                  key: '1',
+                },
+                {
+                  label: '2nd item',
+                  key: '2',
+                },
+                {
+                  label: '3rd item',
+                  key: '3',
+                },
+              ],
+            }}
+          >
+            <Button>
+              <EllipsisOutlined/>
+            </Button>
+          </Dropdown>,
+        ]}
+      />
+
+    </PageContainer>
+
   );
 };

@@ -7,6 +7,7 @@ import {
 import {
   LoginForm,
   ProFormText,
+  ProFormRadio
 } from '@ant-design/pro-components';
 import {Helmet, useModel} from '@umijs/max';
 import {message} from 'antd';
@@ -51,7 +52,7 @@ const useStyles = createStyles(({token}) => {
   };
 });
 const Register: React.FC = () => {
-  const [, setUserLoginState] = useState<API.Result>({data: "", msg: "", status: ""});
+  const [, setUserLoginState] = useState<API.Result>({});
   const [type] = useState<string>('account');
   const {initialState, setInitialState} = useModel('@@initialState');
   const {styles} = useStyles();
@@ -73,7 +74,7 @@ const Register: React.FC = () => {
         ...values,
         type,
       });
-      if (response.status === 'ok') {
+      if (response.code === 20000) {
         message.success('注册成功!2秒后跳转');
         setTimeout(async function () {
           await fetchUserInfo();
@@ -81,8 +82,8 @@ const Register: React.FC = () => {
           window.location.href = urlParams.get('redirect') || '/';
         }, 2000)
         return;
-      } else if (response.status === 'fails') {
-        message.warning(response.msg);
+      } else {
+        message.warning(response.description);
       }
       console.log(response);
       // 如果失败去设置用户错误信息
@@ -149,7 +150,7 @@ const Register: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined/>,
                 }}
-                placeholder={'请输入昵称'}
+                placeholder={'请输入昵称（可选）'}
                 rules={[
                   {
                     required: false,
@@ -184,6 +185,21 @@ const Register: React.FC = () => {
                     required: true,
                     message: '确认密码必填且不小于6位！',
                     min: 6
+                  },
+                ]}
+              />
+              <ProFormRadio.Group
+                name="gender"
+                label="性别（可选）"
+                options={
+                [
+                  {
+                    label: '男',
+                    value: 1,
+                  },
+                  {
+                    label: '女',
+                    value: 0,
                   },
                 ]}
               />

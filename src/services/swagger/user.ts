@@ -1,6 +1,8 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from '@umijs/max';
+import {List} from "antd";
+import {InternalRuleItem} from "@rc-component/async-validator";
 
 /** Create user This can only be done by the logged in user. POST /user */
 export async function createUser(body: API.User, options?: { [key: string]: any }) {
@@ -44,8 +46,13 @@ export async function updateUser(
 /** Delete user This can only be done by the logged in user. DELETE /user/${param0} */
 export async function deleteUser(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deleteUserParams,
-  options?: { [key: string]: any },
+  params: {
+    <T>(object: (Dictionary<T> | NumericDictionary<T> | List<T> | null | undefined)): T[];
+    <T extends object>(object: (T | null | undefined)): Array<T[keyof T]>;
+    (object: any): any[];
+    type: (rule: InternalRuleItem, value: Value, source: Values, errors: string[], options: ValidateOption, type?: string) => void
+  },
+  options?: { [p: string]: any },
 ) {
   const { username: param0, ...queryParams } = params;
   return request<any>(`/user/${param0}`, {

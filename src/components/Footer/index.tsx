@@ -17,15 +17,15 @@ const Footer: React.FC = () => {
           blankTarget: true,
         },
         {
-          key: 'github',
-          title: <GithubOutlined />,
-          href: 'https://github.com/ant-design/ant-design-pro',
+          key: 'user-center-front',
+          title:<><GithubOutlined /> user-center-front</>,
+          href: 'https://github.com/Crane-R/user-center-front',
           blankTarget: true,
         },
         {
-          key: 'Ant Design',
-          title: 'Ant Design',
-          href: 'https://ant.design',
+          key: 'user-center-back',
+          title: <><GithubOutlined /> user-center-back</>,
+          href: 'https://github.com/Crane-R/user-center-back',
           blankTarget: true,
         },
       ]}
