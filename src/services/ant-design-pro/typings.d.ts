@@ -6,12 +6,12 @@ declare namespace API {
     username?: string;
     nickname?: string;
     avatarUrl?: string;
-    id?: number;
+    userId?: number;
     gender?: number;
     userStatus?: number;
     createTime?: string;
     updateTime?: string;
-    userRole?: number;
+    userRole?: string;
   };
 
   type LoginResult = {

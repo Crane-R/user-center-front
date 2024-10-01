@@ -116,7 +116,7 @@ const columns: ProColumns<API.CurrentUser>[] = [
           if (!sure) {
             return;
           }
-          await userDelete(currentRow.id);
+          await userDelete(currentRow.userId);
           message.success('删除成功，请手动点击查询以刷新表格')
           const result = await getUserList();
         }}

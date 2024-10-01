@@ -1,3 +1,6 @@
+# 说明
+该用户中心管理系统是一个基石，可以应用于很多管理系统，该基石系统的扩展体现在仓库代码分支
+
 # Ant Design Pro
 
 This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
